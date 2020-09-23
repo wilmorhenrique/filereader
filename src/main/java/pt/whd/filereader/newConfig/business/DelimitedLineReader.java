@@ -1,18 +1,20 @@
 package pt.whd.filereader.newConfig.business;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import pt.whd.filereader.newConfig.DelimitedFileConfig;
 import pt.whd.filereader.newConfig.FieldConfig;
-import pt.whd.filereader.newConfig.FixedLayoutFileConfig;
 import pt.whd.filereader.newConfig.LineConfig;
 
 public class DelimitedLineReader implements LineReader {
 
 	private DelimitedFileConfig config;
 	private List<String> linesToBeRead;
-	List<Field> readFields = new ArrayList<Field>();
+	Map<Integer, List<Field>> extractedLines = new HashMap<Integer, List<Field>>();
+
 	
 		public DelimitedLineReader(DelimitedFileConfig config) {
 			
@@ -25,17 +27,19 @@ public class DelimitedLineReader implements LineReader {
 	}
 
 	public void process() {
+		Integer lineNumber = 0;
 		for (String line : linesToBeRead) {
-			processLine(line);
+			extractedLines.put(lineNumber, processLine(line));
+			lineNumber++;
 		}
 
 	}
 
-	private void processLine(String lineToBeRead) {
+	private List<Field> processLine(String lineToBeRead) {
+		List<Field> readFields = new ArrayList<Field>();
+
 		String[] lineSplited = lineToBeRead.split(config.getDelimitedBy());
-
 		LineConfig lineConfig = getLineConfig(geTypeOfLine(lineSplited));
-
 		
 		List<FieldConfig> fields = lineConfig.getFields();
 		for (FieldConfig fieldConfig : fields) {
@@ -44,8 +48,9 @@ public class DelimitedLineReader implements LineReader {
 			newField.setType(fieldConfig.getType());
 			newField.setContent( lineSplited[fieldConfig.getPosition()]);		
 			
-			getReadFields().add(newField);
+			readFields.add(newField);
 		}
+		return readFields;
 	}
 
 	private LineConfig getLineConfig(String typeOfLine) {
@@ -64,8 +69,9 @@ public class DelimitedLineReader implements LineReader {
 		return lineToBeRead[config.getPositionOfLineType()];
 	}
 
-	public List<Field> getReadFields() {
-		return readFields;
+	@Override
+	public Map<Integer, List<Field>> getExtractedLines() {
+		return extractedLines;
 	}
 
 	

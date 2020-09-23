@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import pt.whd.filereader.newConfig.DelimitedFileConfig;
 import pt.whd.filereader.newConfig.FieldConfig;
@@ -27,10 +28,12 @@ public class TestDelimitedFileConfig {
 		
 		reader.process();
 		
-		List<Field> fields = reader.getReadFields();
-		
-		for (Field field : fields) {
-			System.out.println(field);
+		for (Map.Entry<Integer, List<Field>> entry : reader.getExtractedLines().entrySet()) {
+			List<Field> fields = entry.getValue();
+			System.out.println("Linha: " + entry.getKey() );
+			for (Field field : fields) {
+				System.out.println(field);
+			}
 		}
 		
 	}

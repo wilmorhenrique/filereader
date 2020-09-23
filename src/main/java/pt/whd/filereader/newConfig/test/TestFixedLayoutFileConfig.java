@@ -6,6 +6,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import pt.whd.filereader.newConfig.FieldConfig;
 import pt.whd.filereader.newConfig.FixedLayoutFileConfig;
@@ -17,23 +18,22 @@ public class TestFixedLayoutFileConfig {
 
 	public static void main(String[] args) throws IOException  {
 	
-		// create a configurator to read and extract values from the file
+		// create a configurator to read and extract values from one file
 		FixedLayoutFileConfig config = configFile();
-		System.out.println(config);
 		
 		List<String> linesToBeRead = getLinesFromFile();
 		FixedLayoutLineReader reader = new FixedLayoutLineReader(config);
 		reader.setLinesToBeRead(linesToBeRead);
 		
 		reader.process();
-		
-		List<Field> fields = reader.getReadFields();
-		
-		for (Field field : fields) {
-			System.out.println(field);
+
+		for (Map.Entry<Integer, List<Field>> entry : reader.getExtractedLines().entrySet()) {
+			List<Field> fields = entry.getValue();
+			System.out.println("Linha: " + entry.getKey() );
+			for (Field field : fields) {
+				System.out.println(field);
+			}
 		}
-		
-		
 	}
 	
 	
@@ -59,7 +59,7 @@ public class TestFixedLayoutFileConfig {
 
 
 	private static FixedLayoutFileConfig configFile() {
-		// create a config with a position of the type of the line ( if it not exits let it -1).
+		// create a config with a position of the type of the line ( if it not exits set it to -1).
 			
 		List<FieldConfig> fields = new ArrayList<FieldConfig>();
 		List<LineConfig> lines= new ArrayList<LineConfig>();
