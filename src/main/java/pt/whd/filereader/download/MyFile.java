@@ -1,7 +1,7 @@
 package pt.whd.filereader.download;
 
 public class MyFile {
-	
+	// just a comment from GIT
 	private String url;
 	private String path;
 	private String filename;
