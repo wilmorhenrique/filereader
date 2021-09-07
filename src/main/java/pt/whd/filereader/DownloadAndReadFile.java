@@ -11,7 +11,6 @@ import pt.whd.filereader.download.MyFile;
 import pt.whd.filereader.download.UnzipFile;
 
 public class DownloadAndReadFile {
-	//teste comentário
 
 	public static void main(String[] args) throws Exception {
 		MyFile myFile = new MyFile("http://www1.caixa.gov.br/loterias/_arquivos/loterias/D_megase.zip", "src/main/resources/" ,"batata.zip");
